@@ -20,7 +20,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
         log "Homebrew installed"
     fi
 
-    PACKAGES=(curl git unzip python3 ripgrep codespell lua luarocks)
+    PACKAGES=(curl git unzip python3 ripgrep codespell lua luarocks tmux)
 
     missing=()
     for pkg in "${PACKAGES[@]}"; do
@@ -41,7 +41,7 @@ else
     PACKAGES=(
         curl git unzip build-essential software-properties-common
         python3 python3-venv python3-pip
-        ripgrep codespell
+        ripgrep codespell tmux
         lua5.4 luarocks
     )
 

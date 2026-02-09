@@ -25,3 +25,17 @@ else
     fi
     log "Claude CLI installed"
 fi
+
+# Symlink skills
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SKILLS_SRC="$DOTFILES_DIR/config/claude/skills"
+SKILLS_DST="$HOME/.claude/skills"
+
+if [[ -L "$SKILLS_DST" ]] && [[ "$(readlink "$SKILLS_DST")" == "$SKILLS_SRC" ]]; then
+    log "Claude skills already symlinked"
+else
+    mkdir -p "$HOME/.claude"
+    [[ -e "$SKILLS_DST" ]] && mv "$SKILLS_DST" "$SKILLS_DST.backup.$(date +%s)"
+    ln -sf "$SKILLS_SRC" "$SKILLS_DST"
+    log "Claude skills symlinked: $SKILLS_DST → $SKILLS_SRC"
+fi

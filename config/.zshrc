@@ -41,6 +41,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias v='nvim'
+alias update='bash ~/dotfiles/scripts/update.sh'
 
 # ----- Editor -----
 export EDITOR='nvim'
