@@ -33,7 +33,7 @@ nvim --headless -c 'Lazy sync' -c 'qa' 2>/dev/null
 log "Neovim plugins updated"
 
 header "Oh My Zsh"
-ZSH="$HOME/.oh-my-zsh" command zsh -c 'source $ZSH/oh-my-zsh.sh && omz update --unattended' 2>/dev/null
+ZSH="$HOME/.oh-my-zsh" command zsh -c 'source $ZSH/oh-my-zsh.sh && omz update --unattended' 2>/dev/null || true
 log "Oh My Zsh updated"
 
 header "npm global packages"
