@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+DIM='\033[2m'
+NC='\033[0m'
+
+log()  { echo -e "  ${GREEN}✓${NC} $1"; }
+warn() { echo -e "  ${YELLOW}!${NC} $1"; }
+
+NVIM_CONFIG="$HOME/.config/nvim"
+INIT_LUA_DIR="$HOME/repositories/init.lua"
+
+# Install neovim if not present
+if command -v nvim &>/dev/null; then
+    log "Neovim already installed: $(nvim --version | head -1)"
+else
+    echo "Installing Neovim..."
+    if [[ "$(uname)" == "Darwin" ]]; then
+        brew install neovim
+    else
+        sudo add-apt-repository -y ppa:neovim-ppa/stable
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq neovim
+    fi
+    log "Neovim installed: $(nvim --version | head -1)"
+fi
+
+# Clone init.lua repo if missing
+if [[ -d "$INIT_LUA_DIR" ]]; then
+    log "init.lua repo already present"
+else
+    echo "Cloning init.lua config..."
+    mkdir -p "$HOME/repositories"
+    git clone git@github.com:willysk73/init.lua.git "$INIT_LUA_DIR"
+    log "init.lua repo cloned"
+fi
+
+# Symlink nvim config
+if [[ -L "$NVIM_CONFIG" ]] && [[ "$(readlink "$NVIM_CONFIG")" == "$INIT_LUA_DIR" ]]; then
+    log "Neovim config already symlinked"
+else
+    mkdir -p "$HOME/.config"
+    [[ -e "$NVIM_CONFIG" ]] && mv "$NVIM_CONFIG" "$NVIM_CONFIG.backup.$(date +%s)"
+    ln -sf "$INIT_LUA_DIR" "$NVIM_CONFIG"
+    log "Neovim config symlinked: $NVIM_CONFIG → $INIT_LUA_DIR"
+fi
