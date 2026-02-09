@@ -39,3 +39,16 @@ else
     ln -sf "$SKILLS_SRC" "$SKILLS_DST"
     log "Claude skills symlinked: $SKILLS_DST → $SKILLS_SRC"
 fi
+
+# Symlink agents
+AGENTS_SRC="$DOTFILES_DIR/config/claude/agents"
+AGENTS_DST="$HOME/.claude/agents"
+
+if [[ -L "$AGENTS_DST" ]] && [[ "$(readlink "$AGENTS_DST")" == "$AGENTS_SRC" ]]; then
+    log "Claude agents already symlinked"
+else
+    mkdir -p "$HOME/.claude"
+    [[ -e "$AGENTS_DST" ]] && mv "$AGENTS_DST" "$AGENTS_DST.backup.$(date +%s)"
+    ln -sf "$AGENTS_SRC" "$AGENTS_DST"
+    log "Claude agents symlinked: $AGENTS_DST → $AGENTS_SRC"
+fi
