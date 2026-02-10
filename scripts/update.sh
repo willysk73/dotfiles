@@ -36,14 +36,6 @@ header "Oh My Zsh"
 ZSH="$HOME/.oh-my-zsh" command zsh -c 'source $ZSH/oh-my-zsh.sh && omz update --unattended' 2>/dev/null || true
 log "Oh My Zsh updated"
 
-header "Claude Code"
-if command -v claude &>/dev/null; then
-    claude update 2>/dev/null
-    log "Claude Code updated"
-else
-    warn "Claude Code not found, skipping"
-fi
-
 header "npm global packages"
 if command -v npm &>/dev/null; then
     npm update -g --silent 2>/dev/null
