@@ -28,6 +28,10 @@ header "Neovim config"
 git -C "$HOME/repositories/init.lua" pull --quiet
 log "init.lua updated"
 
+header "Obsidian vault"
+git -C "$HOME/obsidian-vault" pull --quiet
+log "Obsidian vault updated"
+
 header "Neovim plugins"
 nvim --headless -c 'Lazy sync' -c 'qa' 2>/dev/null
 log "Neovim plugins updated"
