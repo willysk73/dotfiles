@@ -32,3 +32,7 @@ else
     ln -sf "$CONFIG_SRC" "$CONFIG_DST"
     log "OpenCode config symlinked: $CONFIG_DST → $CONFIG_SRC"
 fi
+
+# Install oh-my-opencode plugin
+bunx oh-my-opencode install --no-tui --claude=max20 --openai=yes --gemini=no --copilot=no
+log "oh-my-opencode configured"
