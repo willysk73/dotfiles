@@ -45,20 +45,22 @@ echo -e "${BOLD}${MAGENTA}  ╔════════════════�
 echo -e "${BOLD}${MAGENTA}  ║   ${CYAN}Dotfiles Bootstrap Installer${MAGENTA}   ║${NC}"
 echo -e "${BOLD}${MAGENTA}  ╚══════════════════════════════════╝${NC}"
 
-declare -A labels=(
-    [tools.sh]="Base Packages"
-    [ssh.sh]="SSH Keys"
-    [git.sh]="Git Config"
-    [zsh.sh]="Zsh Shell"
-    [neovim.sh]="Neovim"
-    [obsidian.sh]="Obsidian Vault"
-    [claude.sh]="Claude CLI"
-    [opencode.sh]="OpenCode"
-)
+label() {
+    case "$1" in
+        tools.sh)    echo "Base Packages" ;;
+        ssh.sh)      echo "SSH Keys" ;;
+        git.sh)      echo "Git Config" ;;
+        zsh.sh)      echo "Zsh Shell" ;;
+        neovim.sh)   echo "Neovim" ;;
+        obsidian.sh) echo "Obsidian Vault" ;;
+        claude.sh)   echo "Claude CLI" ;;
+        opencode.sh) echo "OpenCode" ;;
+    esac
+}
 
 for script in tools.sh ssh.sh git.sh zsh.sh neovim.sh obsidian.sh claude.sh opencode.sh; do
     if [[ -f "$SCRIPTS_DIR/$script" ]]; then
-        header "${labels[$script]}"
+        header "$(label "$script")"
         bash "$SCRIPTS_DIR/$script"
     fi
 done

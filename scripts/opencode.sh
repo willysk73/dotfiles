@@ -33,6 +33,11 @@ else
     log "OpenCode config symlinked: $CONFIG_DST → $CONFIG_SRC"
 fi
 
+# Ensure bun is in PATH (not inherited in bash subshells)
+if [[ -d "$HOME/.bun/bin" ]]; then
+    export PATH="$HOME/.bun/bin:$PATH"
+fi
+
 # Install oh-my-opencode plugin
 bunx oh-my-opencode install --no-tui --claude=max20 --openai=yes --gemini=no --copilot=no
 log "oh-my-opencode configured"

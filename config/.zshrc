@@ -51,3 +51,6 @@ export VISUAL='nvim'
 if [[ -f "$HOME/dotfiles/install.sh" ]]; then
     bash "$HOME/dotfiles/install.sh" --check
 fi
+
+# opencode
+export PATH=/Users/willkang/.opencode/bin:$PATH
