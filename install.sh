@@ -53,9 +53,10 @@ declare -A labels=(
     [neovim.sh]="Neovim"
     [obsidian.sh]="Obsidian Vault"
     [claude.sh]="Claude CLI"
+    [opencode.sh]="OpenCode"
 )
 
-for script in tools.sh ssh.sh git.sh zsh.sh neovim.sh obsidian.sh claude.sh; do
+for script in tools.sh ssh.sh git.sh zsh.sh neovim.sh obsidian.sh claude.sh opencode.sh; do
     if [[ -f "$SCRIPTS_DIR/$script" ]]; then
         header "${labels[$script]}"
         bash "$SCRIPTS_DIR/$script"

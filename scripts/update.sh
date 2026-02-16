@@ -48,5 +48,13 @@ else
     warn "npm not found, skipping"
 fi
 
+header "OpenCode"
+if command -v opencode &>/dev/null; then
+    opencode upgrade 2>/dev/null || true
+    log "OpenCode updated"
+else
+    warn "OpenCode not found, skipping"
+fi
+
 echo ""
 log "Everything up to date!"
