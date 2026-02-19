@@ -47,10 +47,3 @@ alias update='bash ~/dotfiles/scripts/update.sh'
 export EDITOR='nvim'
 export VISUAL='nvim'
 
-# ----- Dotfiles bootstrap check on login -----
-if [[ -f "$HOME/dotfiles/install.sh" ]]; then
-    bash "$HOME/dotfiles/install.sh" --check
-fi
-
-# opencode
-export PATH=/Users/willkang/.opencode/bin:$PATH

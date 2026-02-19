@@ -20,25 +20,6 @@ warn() { echo -e "  ${YELLOW}!${NC} $1"; }
 err()  { echo -e "  ${RED}✗${NC} $1"; }
 header() { echo -e "\n${BOLD}${CYAN}▸ $1${NC}"; echo -e "${DIM}  ─────────────────────────────${NC}"; }
 
-# Lightweight check mode — called on login
-if [[ "${1:-}" == "--check" ]]; then
-    # Pull latest dotfiles
-    cd "$DOTFILES_DIR"
-    if git pull --quiet 2>/dev/null; then
-        : # silently up to date
-    fi
-
-    # Verify key tools exist
-    missing=()
-    for cmd in git nvim zsh ssh curl; do
-        command -v "$cmd" &>/dev/null || missing+=("$cmd")
-    done
-
-    if [[ ${#missing[@]} -gt 0 ]]; then
-        warn "Missing tools: ${missing[*]} — run ~/dotfiles/install.sh to fix"
-    fi
-    exit 0
-fi
 
 echo ""
 echo -e "${BOLD}${MAGENTA}  ╔══════════════════════════════════╗${NC}"
