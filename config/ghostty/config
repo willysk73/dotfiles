@@ -1,0 +1,7 @@
+theme = GitLab Dark Grey
+font-family = "JetBrainsMono Nerd Font Mono"
+font-family = "D2Coding"
+
+# Make left Option key send Meta/Esc+ sequences so <M-> bindings work in Neovim.
+# Right Option still types special characters (∑ ø ≈ etc.).
+macos-option-as-alt = left
