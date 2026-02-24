@@ -61,3 +61,21 @@ else
         log "Base packages already installed"
     fi
 fi
+
+# fnm + Node.js (required by claude-code, tree-sitter-cli)
+if command -v fnm &>/dev/null; then
+    log "fnm already installed"
+else
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.local/share/fnm" --skip-shell
+    log "fnm installed"
+fi
+
+export PATH="$HOME/.local/share/fnm:$PATH"
+eval "$("$HOME/.local/share/fnm/fnm" env)" 2>/dev/null || true
+
+if command -v node &>/dev/null; then
+    log "Node.js already installed: $(node --version)"
+else
+    fnm install --lts
+    log "Node.js LTS installed: $(node --version)"
+fi

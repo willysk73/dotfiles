@@ -48,3 +48,13 @@ else
     ln -sf "$INIT_LUA_DIR" "$NVIM_CONFIG"
     log "Neovim config symlinked: $NVIM_CONFIG → $INIT_LUA_DIR"
 fi
+
+# tree-sitter CLI (required by nvim-treesitter main branch)
+if command -v tree-sitter &>/dev/null; then
+    log "tree-sitter-cli already installed: $(tree-sitter --version)"
+elif command -v npm &>/dev/null; then
+    npm install -g tree-sitter-cli
+    log "tree-sitter-cli installed"
+else
+    warn "npm not found — install tree-sitter-cli manually after Node.js is available"
+fi
