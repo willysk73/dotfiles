@@ -36,6 +36,9 @@ if [[ -d "$HOME/.opencode/bin" ]]; then
     export PATH="$HOME/.opencode/bin:$PATH"
 fi
 
+# ----- Secrets -----
+[[ -f ~/.secrets ]] && source ~/.secrets
+
 # ----- Aliases -----
 alias ll='ls -alF'
 alias la='ls -A'

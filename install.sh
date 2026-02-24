@@ -36,10 +36,11 @@ label() {
         obsidian.sh) echo "Obsidian Vault" ;;
         claude.sh)   echo "Claude CLI" ;;
         opencode.sh) echo "OpenCode" ;;
+        secrets.sh)  echo "Secrets" ;;
     esac
 }
 
-for script in tools.sh ssh.sh git.sh zsh.sh neovim.sh obsidian.sh claude.sh opencode.sh; do
+for script in tools.sh ssh.sh git.sh zsh.sh neovim.sh obsidian.sh claude.sh opencode.sh secrets.sh; do
     if [[ -f "$SCRIPTS_DIR/$script" ]]; then
         header "$(label "$script")"
         bash "$SCRIPTS_DIR/$script"
