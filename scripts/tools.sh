@@ -71,7 +71,7 @@ else
 fi
 
 export PATH="$HOME/.local/share/fnm:$PATH"
-eval "$("$HOME/.local/share/fnm/fnm" env)" 2>/dev/null || true
+eval "$(fnm env 2>/dev/null)" || true
 
 if command -v node &>/dev/null; then
     log "Node.js already installed: $(node --version)"
