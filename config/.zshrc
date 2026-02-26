@@ -13,6 +13,11 @@ source "$ZSH/oh-my-zsh.sh"
 # ----- PATH -----
 export PATH="$HOME/.local/bin:$PATH"
 
+# Rust / cargo
+if [[ -f "$HOME/.cargo/env" ]]; then
+    source "$HOME/.cargo/env"
+fi
+
 # Homebrew (macOS)
 if [[ -f /opt/homebrew/bin/brew ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"

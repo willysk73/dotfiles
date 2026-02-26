@@ -50,16 +50,55 @@ else
 fi
 
 # tree-sitter CLI (required by nvim-treesitter main branch)
-# Prefer cargo — npm binary requires GLIBC_2.39+ which older Linux distros lack
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 if command -v tree-sitter &>/dev/null && tree-sitter --version &>/dev/null 2>&1; then
     log "tree-sitter-cli already installed: $(tree-sitter --version)"
-elif command -v cargo &>/dev/null; then
-    cargo install tree-sitter-cli
-    log "tree-sitter-cli installed via cargo"
-elif command -v npm &>/dev/null; then
-    npm install -g tree-sitter-cli
-    log "tree-sitter-cli installed via npm"
 else
-    warn "Neither cargo nor npm found — install tree-sitter-cli manually"
+    installed=false
+    # Prefer cargo (builds latest, needs libclang-dev)
+    if [[ "$installed" == false ]] && command -v cargo &>/dev/null; then
+        if cargo install tree-sitter-cli 2>/dev/null; then
+            log "tree-sitter-cli installed via cargo: $(tree-sitter --version)"
+            installed=true
+        fi
+    fi
+
+    # Fall back to pre-built binary from GitHub releases
+    if [[ "$installed" == false ]] && [[ "$(uname)" == "Linux" ]]; then
+        arch=$(uname -m)
+        case "$arch" in
+            x86_64)  ts_arch="x64" ;;
+            aarch64) ts_arch="arm64" ;;
+            *)       ts_arch="" ;;
+        esac
+        if [[ -n "$ts_arch" ]]; then
+            mkdir -p "$HOME/.local/bin"
+            for ts_ver in "latest/download" "download/v0.25.10"; do
+                ts_url="https://github.com/tree-sitter/tree-sitter/releases/${ts_ver}/tree-sitter-linux-${ts_arch}.gz"
+                if curl -fsSL "$ts_url" | gunzip > "$HOME/.local/bin/tree-sitter" 2>/dev/null; then
+                    chmod +x "$HOME/.local/bin/tree-sitter"
+                    if "$HOME/.local/bin/tree-sitter" --version &>/dev/null; then
+                        log "tree-sitter-cli installed from GitHub release: $("$HOME/.local/bin/tree-sitter" --version)"
+                        installed=true
+                        break
+                    else
+                        rm -f "$HOME/.local/bin/tree-sitter"
+                    fi
+                fi
+            done
+        fi
+    fi
+
+    # Last resort: npm (may fail on older GLIBC)
+    if [[ "$installed" == false ]] && command -v npm &>/dev/null; then
+        if npm install -g tree-sitter-cli 2>/dev/null; then
+            if tree-sitter --version &>/dev/null 2>&1; then
+                log "tree-sitter-cli installed via npm"
+                installed=true
+            fi
+        fi
+    fi
+    if [[ "$installed" == false ]]; then
+        warn "Could not install tree-sitter-cli — nvim-treesitter may not work"
+    fi
 fi
