@@ -62,6 +62,18 @@ else
     fi
 fi
 
+# Rust / cargo (tree-sitter-cli via npm requires GLIBC_2.39+ on older Linux)
+if [[ "$(uname)" != "Darwin" ]]; then
+    [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+    if command -v cargo &>/dev/null; then
+        log "Rust already installed: $(rustc --version)"
+    else
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+        source "$HOME/.cargo/env" 2>/dev/null || true
+        log "Rust installed: $(rustc --version)"
+    fi
+fi
+
 # fnm + Node.js (required by claude-code, tree-sitter-cli)
 if command -v fnm &>/dev/null; then
     log "fnm already installed"
