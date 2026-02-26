@@ -52,7 +52,7 @@ fi
 # tree-sitter CLI (required by nvim-treesitter main branch)
 # Prefer cargo — npm binary requires GLIBC_2.39+ which older Linux distros lack
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
-if command -v tree-sitter &>/dev/null; then
+if command -v tree-sitter &>/dev/null && tree-sitter --version &>/dev/null 2>&1; then
     log "tree-sitter-cli already installed: $(tree-sitter --version)"
 elif command -v cargo &>/dev/null; then
     cargo install tree-sitter-cli
