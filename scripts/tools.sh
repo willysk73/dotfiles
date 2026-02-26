@@ -54,7 +54,8 @@ else
 
     if [[ ${#missing[@]} -gt 0 ]]; then
         echo "Installing: ${missing[*]}"
-        sudo apt-get update -qq
+        sudo apt-get update -qq 2>/dev/null || warn "apt update had errors — some repos may be stale"
+        sudo apt-get -f install -y -qq 2>/dev/null || true
         sudo apt-get install -y -qq "${missing[@]}"
         log "Base packages installed"
     else
