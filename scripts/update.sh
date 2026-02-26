@@ -16,7 +16,8 @@ header "System packages"
 if [[ "$(uname)" == "Darwin" ]]; then
     brew update && brew upgrade
 else
-    sudo apt-get update -qq && sudo apt-get upgrade -y -qq
+    sudo apt-get update -qq 2>/dev/null || warn "apt update had errors — some repos may be stale (check: apt-get update)"
+    sudo apt-get upgrade -y -qq 2>/dev/null || warn "apt upgrade had errors — run: sudo apt --fix-broken install"
 fi
 log "System packages updated"
 
