@@ -33,9 +33,16 @@ else
     log "OpenCode config symlinked: $CONFIG_DST → $CONFIG_SRC"
 fi
 
-# Ensure bun is in PATH (not inherited in bash subshells)
+# Ensure bun is installed and in PATH
 if [[ -d "$HOME/.bun/bin" ]]; then
     export PATH="$HOME/.bun/bin:$PATH"
+fi
+
+if ! command -v bun &>/dev/null; then
+    echo "Installing bun..."
+    curl -fsSL https://bun.sh/install | bash
+    export PATH="$HOME/.bun/bin:$PATH"
+    log "bun installed"
 fi
 
 # Install oh-my-opencode plugin

@@ -55,3 +55,6 @@ alias update='bash ~/dotfiles/scripts/update.sh'
 export EDITOR='nvim'
 export VISUAL='nvim'
 
+
+# bun completions
+[ -s "/Users/willkang/.bun/_bun" ] && source "/Users/willkang/.bun/_bun"
