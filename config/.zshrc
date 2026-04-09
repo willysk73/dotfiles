@@ -36,11 +36,6 @@ if [[ -d "$HOME/.bun" ]]; then
     export PATH="$BUN_INSTALL/bin:$PATH"
 fi
 
-# opencode
-if [[ -d "$HOME/.opencode/bin" ]]; then
-    export PATH="$HOME/.opencode/bin:$PATH"
-fi
-
 # ----- Secrets -----
 [[ -f ~/.secrets ]] && source ~/.secrets
 
