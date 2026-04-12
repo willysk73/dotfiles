@@ -26,6 +26,29 @@ else
     log "Claude CLI installed"
 fi
 
+if command -v codex &>/dev/null; then
+    log "Codex CLI already installed"
+else
+    echo "Installing Codex CLI..."
+    if command -v npm &>/dev/null; then
+        npm install -g @openai/codex
+    elif command -v bun &>/dev/null; then
+        bun install -g @openai/codex
+    else
+        echo "Neither npm nor bun found — install Node.js first, then re-run"
+        exit 1
+    fi
+    log "Codex CLI installed"
+fi
+
+if codex login status &>/dev/null; then
+    log "Codex already logged in"
+else
+    echo "Logging in to Codex (device auth)..."
+    codex login --device-auth
+    log "Codex login complete"
+fi
+
 # Symlink skills
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILLS_SRC="$DOTFILES_DIR/config/claude/skills"
@@ -51,4 +74,17 @@ else
     [[ -e "$AGENTS_DST" ]] && mv "$AGENTS_DST" "$AGENTS_DST.backup.$(date +%s)"
     ln -sf "$AGENTS_SRC" "$AGENTS_DST"
     log "Claude agents symlinked: $AGENTS_DST → $AGENTS_SRC"
+fi
+
+# Symlink settings.json
+SETTINGS_SRC="$DOTFILES_DIR/config/claude/settings.json"
+SETTINGS_DST="$HOME/.claude/settings.json"
+
+if [[ -L "$SETTINGS_DST" ]] && [[ "$(readlink "$SETTINGS_DST")" == "$SETTINGS_SRC" ]]; then
+    log "Claude settings already symlinked"
+else
+    mkdir -p "$HOME/.claude"
+    [[ -e "$SETTINGS_DST" ]] && mv "$SETTINGS_DST" "$SETTINGS_DST.backup.$(date +%s)"
+    ln -sf "$SETTINGS_SRC" "$SETTINGS_DST"
+    log "Claude settings symlinked: $SETTINGS_DST → $SETTINGS_SRC"
 fi
