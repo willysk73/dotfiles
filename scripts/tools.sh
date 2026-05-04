@@ -20,7 +20,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
         log "Homebrew installed"
     fi
 
-    PACKAGES=(curl git unzip python3 ripgrep codespell lua luarocks tmux)
+    PACKAGES=(curl wget git unzip python3 python@3.12 ripgrep fd codespell lua luarocks tmux tree-sitter-cli ruff uv)
 
     missing=()
     for pkg in "${PACKAGES[@]}"; do
@@ -41,7 +41,7 @@ else
     PACKAGES=(
         curl git unzip build-essential software-properties-common
         python3 python3-venv python3-pip
-        ripgrep codespell tmux libclang-dev
+        ripgrep fd-find codespell tmux libclang-dev
         lua5.4 luarocks
     )
 
@@ -92,4 +92,44 @@ if command -v node &>/dev/null; then
 else
     fnm install --lts
     log "Node.js LTS installed: $(node --version)"
+fi
+
+# ruff + uv (Linux only — macOS gets them via brew above)
+if [[ "$(uname)" != "Darwin" ]]; then
+    export PATH="$HOME/.local/bin:$PATH"
+    if command -v ruff &>/dev/null; then
+        log "ruff already installed: $(ruff --version)"
+    else
+        curl -LsSf https://astral.sh/ruff/install.sh | sh
+        log "ruff installed: $(ruff --version)"
+    fi
+
+    if command -v uv &>/dev/null; then
+        log "uv already installed: $(uv --version)"
+    else
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        log "uv installed: $(uv --version)"
+    fi
+fi
+
+# uv-managed Python 3.12 + pynvim venv for nvim's Python provider
+# (brew Python strips ensurepip wheels; uv-standalone Python has macOS rpath
+#  bug in `python -m venv`, so we use `uv venv` which bypasses it)
+if command -v uv &>/dev/null; then
+    if uv python find 3.12 &>/dev/null; then
+        log "uv-managed Python 3.12 already installed: $(uv python find 3.12)"
+    else
+        uv python install 3.12
+        log "uv-managed Python 3.12 installed: $(uv python find 3.12)"
+    fi
+
+    NVIM_PY_VENV="$HOME/.local/share/nvim/python3"
+    if [[ -x "$NVIM_PY_VENV/bin/python" ]] && "$NVIM_PY_VENV/bin/python" -c "import pynvim" &>/dev/null; then
+        log "pynvim already installed in $NVIM_PY_VENV"
+    else
+        rm -rf "$NVIM_PY_VENV"
+        uv venv --python 3.12 "$NVIM_PY_VENV" >/dev/null
+        uv pip install --python "$NVIM_PY_VENV/bin/python" pynvim >/dev/null
+        log "pynvim installed in $NVIM_PY_VENV"
+    fi
 fi

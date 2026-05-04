@@ -14,16 +14,16 @@ warn() { echo -e "  ${YELLOW}!${NC} $1"; }
 if command -v claude &>/dev/null; then
     log "Claude CLI already installed"
 else
-    echo "Installing Claude CLI..."
-    if command -v npm &>/dev/null; then
-        npm install -g @anthropic-ai/claude-code
-    elif command -v bun &>/dev/null; then
-        bun install -g @anthropic-ai/claude-code
-    else
-        echo "Neither npm nor bun found — install Node.js first, then re-run"
-        exit 1
-    fi
+    echo "Installing Claude CLI (native installer)..."
+    curl -fsSL https://claude.ai/install.sh | bash
+    export PATH="$HOME/.local/bin:$PATH"
     log "Claude CLI installed"
+fi
+
+# Make fnm-managed node/npm available (tools.sh installs fnm but PATH doesn't persist across scripts)
+if [[ -d "$HOME/.local/share/fnm" ]]; then
+    export PATH="$HOME/.local/share/fnm:$PATH"
+    eval "$(fnm env 2>/dev/null)" || true
 fi
 
 if command -v codex &>/dev/null; then

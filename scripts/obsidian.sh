@@ -16,7 +16,10 @@ OBSIDIAN_REPO="git@github.com:willysk73/obsidian-vault.git"
 if [[ -d "$OBSIDIAN_VAULT" ]]; then
     log "Obsidian vault already present"
 else
-    mapfile -t branches < <(git ls-remote --heads "$OBSIDIAN_REPO" | awk -F'refs/heads/' '{print $2}')
+    branches=()
+    while IFS= read -r branch; do
+        [[ -n "$branch" ]] && branches+=("$branch")
+    done < <(git ls-remote --heads "$OBSIDIAN_REPO" | awk -F'refs/heads/' '{print $2}')
 
     if [[ ${#branches[@]} -eq 0 ]]; then
         warn "No branches found, cloning default branch"

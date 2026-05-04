@@ -55,6 +55,16 @@ if command -v tree-sitter &>/dev/null && tree-sitter --version &>/dev/null 2>&1;
     log "tree-sitter-cli already installed: $(tree-sitter --version)"
 else
     installed=false
+    # macOS: prefer Homebrew (no toolchain needed)
+    if [[ "$installed" == false ]] && [[ "$(uname)" == "Darwin" ]] && command -v brew &>/dev/null; then
+        if brew install tree-sitter-cli 2>/dev/null; then
+            if tree-sitter --version &>/dev/null 2>&1; then
+                log "tree-sitter-cli installed via brew: $(tree-sitter --version)"
+                installed=true
+            fi
+        fi
+    fi
+
     # Prefer cargo (builds latest, needs libclang-dev)
     if [[ "$installed" == false ]] && command -v cargo &>/dev/null; then
         if cargo install tree-sitter-cli 2>/dev/null; then
