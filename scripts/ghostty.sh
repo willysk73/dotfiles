@@ -13,6 +13,22 @@ NC='\033[0m'
 log()  { echo -e "  ${GREEN}✓${NC} $1"; }
 warn() { echo -e "  ${YELLOW}!${NC} $1"; }
 
+# Fonts referenced by ghostty config (macOS only — brew casks)
+if [[ "$(uname)" == "Darwin" ]] && command -v brew &>/dev/null; then
+    FONTS=(font-jetbrains-mono-nerd-font font-d2coding)
+    missing_fonts=()
+    for font in "${FONTS[@]}"; do
+        brew list --cask "$font" &>/dev/null || missing_fonts+=("$font")
+    done
+    if [[ ${#missing_fonts[@]} -gt 0 ]]; then
+        echo "Installing fonts: ${missing_fonts[*]}"
+        brew install --cask "${missing_fonts[@]}"
+        log "Fonts installed"
+    else
+        log "Fonts already installed"
+    fi
+fi
+
 # Symlink ghostty config
 CONFIG_SRC="$DOTFILES_DIR/config/ghostty/config"
 CONFIG_DST="$HOME/.config/ghostty/config"
