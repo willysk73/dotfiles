@@ -59,6 +59,27 @@
 - 셸: 가능하면 zsh 호환. POSIX 한정 명시 시에만 sh.
 - diff: 평소 `git diff`, 복잡한 변경엔 `delta` 사용 가능 시 활용.
 
+## AI / ML 작업 — 최신성 강제
+
+본인의 활동 상당 부분이 LLM/AI/ML 연구·개발임. 이 도메인은 분기 단위로 SOTA·모델·SDK가 갱신되므로, **훈련 컷오프 시점에 멈춰있는 본인(Claude)의 지식을 신뢰하지 마라**. 다음 영역에선 작업 전 *반드시* 현재 정보를 확인:
+
+- **모델 ID 선정**: 본인이 외우고 있는 모델 이름(`claude-3-opus`, `gpt-4-turbo`, `gemini-1.5-pro` 등)은 deprecated 됐을 가능성이 큼. 코드에 모델 이름 박기 전:
+    - Anthropic: 공식 docs 또는 시스템 프롬프트의 모델 ID 가이드 확인 (현재 라인업: `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-5`).
+    - OpenAI/Google/Meta: WebSearch 또는 공식 docs로 최신 라인업 확인. 본인 cutoff 이후 새 모델 다수 출시됐을 수 있음.
+    - 사용자가 명시한 모델 외엔 추측해서 박지 말 것 — "최신 모델을 고르겠다"고 임의로 고르지도 말 것. 모르면 사용자에게 확인.
+- **SDK·라이브러리 API**: `anthropic`, `openai`, `langchain`, `transformers`, `vllm`, `sglang`, `pydantic` 등 ML 생태계는 메이저 버전 자주 바뀌고 deprecation 잦음. 작업 전:
+    - `pip show <pkg>` / `package.json` / `pyproject.toml`로 *프로젝트가 실제 쓰는 버전* 확인.
+    - 그 버전 기준 공식 문서로 코딩 (Context7 MCP 활성화돼 있으면 `use context7` 트리거 또는 `resolve-library-id` → `get-library-docs` 호출로 인라인 로드).
+- **벤치마크·논문**: "최신 SOTA"라고 단정 금지. 6개월 내 갱신 가능성 큼. 추측 대신 WebSearch로 확인 후 인용.
+- **추론·학습 인프라**: vLLM, SGLang, llama.cpp, ollama, TGI 등은 분기마다 기능 추가됨. 프로젝트 lockfile 버전 기준으로 그 버전의 API 사용.
+
+확인 도구:
+- **Context7** MCP — 라이브러리 공식 문서 실시간 조회 (LLM hallucination/구버전 API 방지용).
+- **WebFetch / WebSearch** — Anthropic/OpenAI/Google docs URL 직접 조회.
+- **`pip index versions <pkg>` / `npm view <pkg> versions`** — 패키지 가용 버전 확인.
+
+원칙: *모르면 검색. 추측 금지.* AI/ML 도메인은 본인 cutoff 지식 신뢰도가 다른 도메인보다 현저히 낮음 — 1년 전 정보가 이미 outdated.
+
 ## 테스트 정책
 
 - 사용자가 명시 요청하지 않으면 테스트 자동 추가/수정 금지. 단, 기존 테스트가 깨지면 보고하고 승인 후 수정.

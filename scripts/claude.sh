@@ -126,3 +126,16 @@ else
     ln -sf "$CLAUDEMD_SRC" "$CODEX_AGENTS_DST"
     log "Codex AGENTS.md symlinked: $CODEX_AGENTS_DST → $CLAUDEMD_SRC"
 fi
+
+# Install Context7 MCP server (real-time library docs — combats LLM hallucination
+# of stale APIs in fast-moving AI/ML SDKs). User scope = all sessions on this machine.
+if claude mcp list 2>/dev/null | grep -q "^context7:"; then
+    log "Context7 MCP already configured"
+else
+    if command -v npx &>/dev/null; then
+        claude mcp add -s user context7 -- npx -y @upstash/context7-mcp
+        log "Context7 MCP added (user scope)"
+    else
+        warn "npx not found — skipping Context7 MCP install"
+    fi
+fi
