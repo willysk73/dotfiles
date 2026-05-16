@@ -88,3 +88,41 @@ else
     ln -sf "$SETTINGS_SRC" "$SETTINGS_DST"
     log "Claude settings symlinked: $SETTINGS_DST → $SETTINGS_SRC"
 fi
+
+# Symlink CLAUDE.md (global instructions)
+CLAUDEMD_SRC="$DOTFILES_DIR/config/claude/CLAUDE.md"
+CLAUDEMD_DST="$HOME/.claude/CLAUDE.md"
+
+if [[ -L "$CLAUDEMD_DST" ]] && [[ "$(readlink "$CLAUDEMD_DST")" == "$CLAUDEMD_SRC" ]]; then
+    log "Claude CLAUDE.md already symlinked"
+else
+    mkdir -p "$HOME/.claude"
+    [[ -e "$CLAUDEMD_DST" ]] && mv "$CLAUDEMD_DST" "$CLAUDEMD_DST.backup.$(date +%s)"
+    ln -sf "$CLAUDEMD_SRC" "$CLAUDEMD_DST"
+    log "Claude CLAUDE.md symlinked: $CLAUDEMD_DST → $CLAUDEMD_SRC"
+fi
+
+# Symlink lang/ (per-language conventions referenced by CLAUDE.md)
+LANG_SRC="$DOTFILES_DIR/config/claude/lang"
+LANG_DST="$HOME/.claude/lang"
+
+if [[ -L "$LANG_DST" ]] && [[ "$(readlink "$LANG_DST")" == "$LANG_SRC" ]]; then
+    log "Claude lang/ already symlinked"
+else
+    mkdir -p "$HOME/.claude"
+    [[ -e "$LANG_DST" ]] && mv "$LANG_DST" "$LANG_DST.backup.$(date +%s)"
+    ln -sf "$LANG_SRC" "$LANG_DST"
+    log "Claude lang/ symlinked: $LANG_DST → $LANG_SRC"
+fi
+
+# Symlink CLAUDE.md to ~/.codex/AGENTS.md (codex/aider/cursor compat)
+CODEX_AGENTS_DST="$HOME/.codex/AGENTS.md"
+
+if [[ -L "$CODEX_AGENTS_DST" ]] && [[ "$(readlink "$CODEX_AGENTS_DST")" == "$CLAUDEMD_SRC" ]]; then
+    log "Codex AGENTS.md already symlinked"
+else
+    mkdir -p "$HOME/.codex"
+    [[ -e "$CODEX_AGENTS_DST" ]] && mv "$CODEX_AGENTS_DST" "$CODEX_AGENTS_DST.backup.$(date +%s)"
+    ln -sf "$CLAUDEMD_SRC" "$CODEX_AGENTS_DST"
+    log "Codex AGENTS.md symlinked: $CODEX_AGENTS_DST → $CLAUDEMD_SRC"
+fi
