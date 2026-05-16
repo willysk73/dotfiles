@@ -1,4 +1,5 @@
 {
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -17,7 +18,8 @@
   },
   "enabledPlugins": {
     "claude-hud@claude-hud": true,
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "ccx@ccx-loop": true
   },
   "extraKnownMarketplaces": {
     "claude-hud": {
@@ -31,7 +33,14 @@
         "source": "github",
         "repo": "openai/codex-plugin-cc"
       }
+    },
+    "ccx-loop": {
+      "source": {
+        "source": "github",
+        "repo": "willysk73/ccx-loop"
+      }
     }
   },
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "editorMode": "vim"
 }
